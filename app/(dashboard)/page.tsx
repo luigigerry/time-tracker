@@ -65,7 +65,7 @@ export default function Home() {
         <div className="mt-20 flex flex-col items-center">
           <div className="border-2 border-gray-200 rounded-lg p-4 w-[80%]">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Bienvenido {user.firstName}</h1>
+              <h1 className="text-2xl font-bold">Bienvenido {user?.firstName}</h1>
               <Button className="cursor-pointer" onClick={() => setOpenDialog(true)}>Crear tarea</Button>
             </div>
             <p className="text-gray-500 mt-2">¡Estamos felices de tenerte aquí!</p>
