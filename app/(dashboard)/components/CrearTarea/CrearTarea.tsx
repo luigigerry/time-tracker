@@ -112,7 +112,6 @@ export function CrearTareaDialog({
                   id="costos"
                   name="costos"
                   type='number'
-                  value={formData.tarea}
                   onChange={handleChange}
                   placeholder="Costo del proyecto"
                 />
@@ -132,7 +131,6 @@ export function CrearTareaDialog({
                   id="sueldo"
                   name="sueldo"
                   type='number'
-                  value={formData.tarea}
                   onChange={handleChange}
                   placeholder="Sueldo"
                 />
@@ -151,7 +149,6 @@ export function CrearTareaDialog({
                   id="horasTrabajadas"
                   name="horasTrabajadas"
                   type='number'
-                  value={formData.tarea}
                   onChange={handleChange}
                   placeholder="Horas trabajadas"
                 />
