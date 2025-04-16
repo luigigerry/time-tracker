@@ -15,6 +15,8 @@ export default function Home() {
   const { user } = useUser()
   const [isFirstVisit, setIsFirstVisit] = useState(false)
   const [reload, setReload] = useState(false)
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [infoUser, setInfoUser] = useState<Usuario | null>(null)
   const [openDialog, setOpenDialog] = useState(false)
 
