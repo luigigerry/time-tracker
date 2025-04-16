@@ -1,6 +1,6 @@
 'use client'
 
-import { LoaderProfile } from "@/components/shared/LoaderProfile/LoaderProfile";
+// import { LoaderProfile } from "@/components/shared/LoaderProfile/LoaderProfile";
 import { StepConfigUserProvider } from "@/contexts/StepConfigUser/StepConfigUser";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
@@ -38,11 +38,11 @@ export default function Home() {
   }, [user?.id, reload, user])
   
 
-  if (!user || !infoUser) {
-    return (
-      <LoaderProfile />
-    )
-  }
+  // if (!user || !infoUser) {
+  //   return (
+  //     <LoaderProfile />
+  //   )
+  // }
 
   if (isFirstVisit) {
     console.log("[isFirstVisit]", isFirstVisit)
