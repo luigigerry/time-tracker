@@ -1,7 +1,7 @@
 // app/api/sync-user/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { getAuth } from '@clerk/nextjs/server';
+import { currentUser, getAuth } from '@clerk/nextjs/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,6 +10,8 @@ export async function GET(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const userSession = await currentUser()
 
     // Buscar o crear usuario
     let user = await prisma.usuario.findUnique({
@@ -22,7 +24,7 @@ export async function GET(req: NextRequest) {
         data: {
           id: userId,
           nombre: '', // Campos vacíos
-          email: '', // Temporal
+          email: userSession?.emailAddresses[0].emailAddress, // Extract emailAddress property
           firstLogin: true,
         }
       });
