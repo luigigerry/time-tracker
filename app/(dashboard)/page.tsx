@@ -11,14 +11,12 @@ import { Button } from "@/components/ui/button";
 import { CrearTareaDialog } from "./components/CrearTarea/CrearTarea";
 import { ListaProyectos } from "./components/ListarTareas/ListarTareas";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 
 export default function Home() {
   const { user } = useUser()
   const [isFirstVisit, setIsFirstVisit] = useState(false)
   const [reload, setReload] = useState(false)
-  const router = useRouter()
   
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [infoUser, setInfoUser] = useState<Usuario | null>(null)
@@ -83,8 +81,8 @@ export default function Home() {
       if (result.success) {
         // window.location.reload()
         toast.success("Tarea creada con éxito")
-        await new Promise(resolve => setTimeout(resolve, 200));
-        router.refresh()
+        await new Promise(resolve => setTimeout(resolve, 300));
+        window.location.reload()
       }
     } catch (error) {
       console.error("Error al enviar datos: ", error)
