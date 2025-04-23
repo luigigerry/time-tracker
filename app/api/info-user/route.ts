@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
           nombre: '', // Campos vacíos
           email: userSession?.emailAddresses[0].emailAddress, // Extract emailAddress property
           firstLogin: true,
+          clerkUserId: userSession?.id
         }
       });
     }
