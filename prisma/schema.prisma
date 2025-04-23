@@ -58,15 +58,18 @@ generator client {
 // }
 
 model Usuario {
-  id          String          @id
-  nombre      String          @default("")
-  email       String          @unique @default("")
-  firstLogin  Boolean         @default(true)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  registros   RegistroHoras[]
-  proyectos   Proyecto[]
-  clerkUserId String          @unique @default("")
+  id             String          @id
+  nombre         String          @default("")
+  email          String          @unique @default("")
+  firstLogin     Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  registros      RegistroHoras[]
+  proyectos      Proyecto[]
+  clerkUserId    String          @unique @default("")
+  costos         Float           @default(0.0) // Costo por hora
+  sueldo         Float           @default(0.0) // Sueldo mensual
+  nombreProyecto String? // Nombre del proyecto asignado
 }
 
 model Proyecto {

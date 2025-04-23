@@ -9,12 +9,16 @@ import { Usuario } from "@prisma/client";
 import { UserProvider } from "@/contexts/UserContext/UserContext";
 import { Button } from "@/components/ui/button";
 import { CrearTareaDialog } from "./components/CrearTarea/CrearTarea";
+import { ListaProyectos } from "./components/ListarTareas/ListarTareas";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export default function Home() {
   const { user } = useUser()
   const [isFirstVisit, setIsFirstVisit] = useState(false)
   const [reload, setReload] = useState(false)
+  const router = useRouter()
   
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [infoUser, setInfoUser] = useState<Usuario | null>(null)
@@ -55,8 +59,36 @@ export default function Home() {
     )
   }
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (data: {
+    proyecto: string
+    costos: number
+    sueldo: number
+    horasTrabajadas: number
+  }) => {
+    console.log("Datos del formulario: ", data)
     setOpenDialog(false)
+
+    try {
+      const response = await fetch('/api/crear-tarea', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+      console.log("Respuesta del servidor: ", result)
+
+      if (result.success) {
+        // window.location.reload()
+        toast.success("Tarea creada con éxito")
+        await new Promise(resolve => setTimeout(resolve, 200));
+        router.refresh()
+      }
+    } catch (error) {
+      console.error("Error al enviar datos: ", error)
+    }
   }
 
   return (
@@ -75,7 +107,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Tiempos</h1>
             </div>
-            
+              <ListaProyectos />
           </div>
         </div>
       </div>

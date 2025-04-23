@@ -19,8 +19,9 @@ interface CrearTareaDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: {
     proyecto: string;
-    tarea: string;
-    horaInicio: string;
+    costos: number;
+    sueldo: number;
+    horasTrabajadas: number;
   }) => void;
 }
 
@@ -31,14 +32,21 @@ export function CrearTareaDialog({
 }: CrearTareaDialogProps) {
   const [formData, setFormData] = useState({
     proyecto: '',
-    tarea: '',
-    horaInicio: '',
+    costos: 0,
+    sueldo: 0,
+    horasTrabajadas: 0,
   });
+  
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: name === 'proyecto' ? value : Number(value) 
+    }));
+    
     // Limpiar errores al editar
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -51,13 +59,14 @@ export function CrearTareaDialog({
     if (!formData.proyecto.trim()) {
       newErrors.proyecto = 'El nombre del proyecto es requerido';
     }
-    if (!formData.tarea.trim()) {
-      newErrors.tarea = 'El nombre de la tarea es requerido';
+    if (formData.costos <= 0) {
+      newErrors.costos = 'El costo debe ser mayor a 0';
     }
-    if (!formData.horaInicio) {
-      newErrors.horaInicio = 'La hora de inicio es requerida';
-    } else if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(formData.horaInicio)) {
-      newErrors.horaInicio = 'Formato inválido (HH:MM)';
+    if (formData.sueldo <= 0) {
+      newErrors.sueldo = 'El sueldo debe ser mayor a 0';
+    }
+    if (formData.horasTrabajadas <= 0) {
+      newErrors.horasTrabajadas = 'Las horas trabajadas deben ser mayores a 0';
     }
 
     setErrors(newErrors);
@@ -67,10 +76,15 @@ export function CrearTareaDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      onSubmit(formData);
+      onSubmit({
+        proyecto: formData.proyecto,
+        costos: formData.costos,
+        sueldo: formData.sueldo,
+        horasTrabajadas: formData.horasTrabajadas
+      });
       onOpenChange(false);
       // Resetear formulario después de enviar
-      setFormData({ proyecto: '', tarea: '', horaInicio: '' });
+      setFormData({ proyecto: '', costos: 0, sueldo: 0, horasTrabajadas: 0 });
     }
   };
 
@@ -102,58 +116,65 @@ export function CrearTareaDialog({
               </div>
             </div>
 
-            {/* Campo: Nombre de la Tarea */}
+            {/* Campo: Costos del Proyecto */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="tarea" className="text-right">
+              <Label htmlFor="costos" className="text-right">
                 Costos
               </Label>
               <div className="col-span-3">
                 <Input
                   id="costos"
                   name="costos"
-                  type='number'
+                  type="number"
+                  min="0"
+                  // value={formData.costos}
                   onChange={handleChange}
                   placeholder="Costo del proyecto"
                 />
-                {errors.tarea && (
-                  <p className="mt-1 text-sm text-red-500">{errors.tarea}</p>
+                {errors.costos && (
+                  <p className="mt-1 text-sm text-red-500">{errors.costos}</p>
                 )}
               </div>
             </div>
 
-            {/* Campo: Sueldo */}
+            {/* Campo: Sueldo por Hora */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="tarea" className="text-right">
-                Sueldo
+              <Label htmlFor="sueldo" className="text-right">
+                Sueldo/Hora
               </Label>
               <div className="col-span-3">
                 <Input
                   id="sueldo"
                   name="sueldo"
-                  type='number'
+                  type="number"
+                  min="0"
+                  // value={formData.sueldo}
                   onChange={handleChange}
-                  placeholder="Sueldo"
+                  placeholder="Sueldo por hora"
                 />
-                {errors.tarea && (
-                  <p className="mt-1 text-sm text-red-500">{errors.tarea}</p>
+                {errors.sueldo && (
+                  <p className="mt-1 text-sm text-red-500">{errors.sueldo}</p>
                 )}
               </div>
             </div>
 
+            {/* Campo: Horas Trabajadas */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="tarea" className="text-left">
-                Horas trabajadas
+              <Label htmlFor="horasTrabajadas" className="text-right">
+                Horas
               </Label>
               <div className="col-span-3">
                 <Input
                   id="horasTrabajadas"
                   name="horasTrabajadas"
-                  type='number'
+                  type="number"
+                  min="0"
+                  // value={formData.horasTrabajadas}
                   onChange={handleChange}
-                  placeholder="Horas trabajadas"
+                  placeholder="Horas trabajadas (ej. 1.5)"
                 />
-                {errors.tarea && (
-                  <p className="mt-1 text-sm text-red-500">{errors.tarea}</p>
+                {errors.horasTrabajadas && (
+                  <p className="mt-1 text-sm text-red-500">{errors.horasTrabajadas}</p>
                 )}
               </div>
             </div>
@@ -161,7 +182,7 @@ export function CrearTareaDialog({
 
           <AlertDialogFooter>
             <AlertDialogCancel type="button">Cancelar</AlertDialogCancel>
-            <AlertDialogAction type="submit">Crear Tarea</AlertDialogAction>
+            <AlertDialogAction type="submit">Crear Proyecto</AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
