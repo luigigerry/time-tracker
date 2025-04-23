@@ -35,10 +35,10 @@ export default function Home() {
 
     checkFirstLogin()
 
-     if (reload) {
-      checkFirstLogin()
-      setReload(false)
-     }
+    if (reload) {
+    checkFirstLogin()
+    setReload(false)
+    }
   }, [user?.id, reload, user])
   
 
