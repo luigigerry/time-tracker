@@ -140,7 +140,7 @@ export function CrearTareaDialog({
             {/* Campo: Sueldo por Hora */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="sueldo" className="text-right">
-                Sueldo/Hora
+                Trabajador
               </Label>
               <div className="col-span-3">
                 <Input
@@ -150,7 +150,7 @@ export function CrearTareaDialog({
                   min="0"
                   // value={formData.sueldo}
                   onChange={handleChange}
-                  placeholder="Sueldo por hora"
+                  placeholder="Trabajador"
                 />
                 {errors.sueldo && (
                   <p className="mt-1 text-sm text-red-500">{errors.sueldo}</p>
@@ -161,7 +161,7 @@ export function CrearTareaDialog({
             {/* Campo: Horas Trabajadas */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="horasTrabajadas" className="text-right">
-                Horas
+                Bolsa de horas
               </Label>
               <div className="col-span-3">
                 <Input
@@ -171,7 +171,7 @@ export function CrearTareaDialog({
                   min="0"
                   // value={formData.horasTrabajadas}
                   onChange={handleChange}
-                  placeholder="Horas trabajadas (ej. 1.5)"
+                  placeholder="Bolsa de horas"
                 />
                 {errors.horasTrabajadas && (
                   <p className="mt-1 text-sm text-red-500">{errors.horasTrabajadas}</p>
