@@ -1,4 +1,3 @@
-// components/ListaProyectos.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -13,9 +12,11 @@ import {
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon, ClockIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, Trash2, Edit, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+// import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface Proyecto {
   id: number;
@@ -31,9 +32,11 @@ interface Proyecto {
 
 export function ListaProyectos() {
   const { user } = useUser();
+  // const router = useRouter();
   const [proyectos, setProyectos] = useState<Proyecto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchProyectos = async () => {
@@ -59,6 +62,28 @@ export function ListaProyectos() {
       fetchProyectos();
     }
   }, [user?.id]);
+
+  const handleDelete = async (id: number) => {
+    setDeletingId(id);
+    try {
+      const response = await fetch(`/api/proyectos/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar proyecto');
+      }
+
+      toast.success('Proyecto eliminado correctamente');
+      // Actualizar la lista de proyectos
+      setProyectos(proyectos.filter(proyecto => proyecto.id !== id));
+    } catch (error) {
+      toast.error('No se pudo eliminar el proyecto');
+      console.error('Error deleting project:', error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -93,15 +118,15 @@ export function ListaProyectos() {
   }));
 
   return (
-    <div className="rounded-md border">
-      <Table>
+    <div className="rounded-md border overflow-x-auto">
+      <Table className="min-w-[800px]">
         <TableHeader>
           <TableRow>
             <TableHead className='w-[200px]'>Nombre</TableHead>
             <TableHead className='w-[300px]'>Descripción</TableHead>
             <TableHead className="w-[150px]">
               <div className='flex items-center'>
-                <CalendarIcon className=" h-4 w-4" />
+                <CalendarIcon className="h-4 w-4 mr-2" />
                 Fecha Inicio
               </div>
             </TableHead>
@@ -126,12 +151,27 @@ export function ListaProyectos() {
               </TableCell>
               <TableCell>{proyecto.horasTotales.toFixed(2)} horas</TableCell>
               <TableCell>
-                <Button variant="outline" size="sm" className="mr-2">
-                  Ver detalles
-                </Button>
-                <Button variant="outline" size="sm">
-                  Editar
-                </Button>
+                <div className="flex space-x-2">
+                  <Button variant="outline" size="sm" className="h-8">
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-8">
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="h-8"
+                    onClick={() => handleDelete(proyecto.id)}
+                    disabled={deletingId === proyecto.id}
+                  >
+                    {deletingId === proyecto.id ? (
+                      <span className="animate-spin">↻</span>
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

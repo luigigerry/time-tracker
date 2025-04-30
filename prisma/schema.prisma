@@ -7,56 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// model Usuario {
-//   id         String          @id // Ahora es String para coincidir con Clerk
-//   nombre     String          @default("")
-//   email      String          @unique @default("") // Temporal, luego lo actualizarás
-//   firstLogin Boolean         @default(true)
-//   createdAt  DateTime        @default(now())
-//   updatedAt  DateTime        @updatedAt
-//   registros  RegistroHoras[]
-
-//   // Añade campos de Clerk si los necesitas
-//   clerkUserId String @unique @default("") // Opcional: para doble referencia
-// }
-
-// model Proyecto {
-//   id          Int             @id @default(autoincrement())
-//   nombre      String
-//   descripcion String?
-//   fechaInicio DateTime
-//   fechaFin    DateTime?
-//   createdAt   DateTime        @default(now())
-//   updatedAt   DateTime        @updatedAt
-//   registros   RegistroHoras[]
-// }
-
-// model Tarea {
-//   id          Int             @id @default(autoincrement())
-//   nombre      String
-//   descripcion String?
-//   createdAt   DateTime        @default(now())
-//   updatedAt   DateTime        @updatedAt
-//   registros   RegistroHoras[]
-// }
-
-// model RegistroHoras {
-//   id         Int      @id @default(autoincrement())
-//   usuario    Usuario  @relation(fields: [usuarioId], references: [id])
-//   usuarioId  String
-//   proyecto   Proyecto @relation(fields: [proyectoId], references: [id])
-//   proyectoId Int
-//   tarea      Tarea    @relation(fields: [tareaId], references: [id])
-//   tareaId    Int
-//   horas      Float
-//   fecha      DateTime
-//   comentario String?
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-
-//   @@unique([usuarioId, proyectoId, tareaId, fecha])
-// }
-
 model Usuario {
   id             String          @id
   nombre         String          @default("")
