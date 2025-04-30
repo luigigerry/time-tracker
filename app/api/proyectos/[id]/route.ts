@@ -68,16 +68,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 export async function DELETE(
   request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+  { params }: { params: { id: string } }
+) {
   try {
     // 1. Verificar autenticación
     const { userId } = getAuth(request);
@@ -110,9 +104,11 @@ export async function DELETE(
 
     // 3. Eliminar en cascada usando transacción
     await prisma.$transaction([
+      // Primero eliminar registros relacionados
       prisma.registroHoras.deleteMany({
         where: { proyectoId: proyecto.id }
       }),
+      // Luego eliminar el proyecto
       prisma.proyecto.delete({
         where: { id: proyecto.id }
       })
