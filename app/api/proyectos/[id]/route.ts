@@ -64,13 +64,15 @@
 // }
 
 // app/api/proyectos/[id]/route.ts
+
+// app/api/proyectos/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     // 1. Verificar autenticación
@@ -84,7 +86,7 @@ export async function DELETE(
 
     // 2. Verificar que el proyecto exista y pertenezca al usuario
     const proyecto = await prisma.proyecto.findUnique({
-      where: { id: Number(context.params.id) },
+      where: { id: Number(params.id) },
       include: { usuario: true }
     });
 
