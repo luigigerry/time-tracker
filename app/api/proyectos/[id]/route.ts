@@ -64,22 +64,20 @@
 // }
 
 // app/api/proyectos/[id]/route.ts
-
-// app/api/proyectos/[id]/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
-): Promise<NextResponse> {
+) {
   try {
     // 1. Verificar autenticación
     const { userId } = getAuth(request);
     if (!userId) {
-      return NextResponse.json(
-        { error: 'No autorizado' },
+      return new Response(
+        JSON.stringify({ error: 'No autorizado' }),
         { status: 401 }
       );
     }
@@ -91,15 +89,15 @@ export async function DELETE(
     });
 
     if (!proyecto) {
-      return NextResponse.json(
-        { error: 'Proyecto no encontrado' },
+      return new Response(
+        JSON.stringify({ error: 'Proyecto no encontrado' }),
         { status: 404 }
       );
     }
 
     if (proyecto.usuario.clerkUserId !== userId) {
-      return NextResponse.json(
-        { error: 'No tienes permisos para eliminar este proyecto' },
+      return new Response(
+        JSON.stringify({ error: 'No tienes permisos para eliminar este proyecto' }),
         { status: 403 }
       );
     }
@@ -114,15 +112,15 @@ export async function DELETE(
       })
     ]);
 
-    return NextResponse.json(
-      { success: true, message: 'Proyecto eliminado correctamente' },
+    return new Response(
+      JSON.stringify({ success: true, message: 'Proyecto eliminado correctamente' }),
       { status: 200 }
     );
 
   } catch (error) {
     console.error('Error al eliminar proyecto:', error);
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
+    return new Response(
+      JSON.stringify({ error: 'Error interno del servidor' }),
       { status: 500 }
     );
   }
