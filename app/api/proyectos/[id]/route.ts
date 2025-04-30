@@ -1,4 +1,3 @@
-// app/api/proyectos/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
