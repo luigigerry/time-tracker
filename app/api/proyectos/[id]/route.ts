@@ -70,8 +70,8 @@ import { getAuth } from '@clerk/nextjs/server';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  context: { params: { id: string } }
+): Promise<NextResponse> {
   try {
     // 1. Verificar autenticación
     const { userId } = getAuth(request);
@@ -84,7 +84,7 @@ export async function DELETE(
 
     // 2. Verificar que el proyecto exista y pertenezca al usuario
     const proyecto = await prisma.proyecto.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(context.params.id) },
       include: { usuario: true }
     });
 
@@ -104,11 +104,9 @@ export async function DELETE(
 
     // 3. Eliminar en cascada usando transacción
     await prisma.$transaction([
-      // Primero eliminar registros relacionados
       prisma.registroHoras.deleteMany({
         where: { proyectoId: proyecto.id }
       }),
-      // Luego eliminar el proyecto
       prisma.proyecto.delete({
         where: { id: proyecto.id }
       })
